@@ -1,0 +1,43 @@
+{
+    "name": "flamarkt/categories",
+    "description": "Product categories for Flamarkt.",
+    "keywords": [
+        "flarum",
+        "flamarkt",
+        "marketplace",
+        "ecommerce",
+        "categories"
+    ],
+    "type": "flarum-extension",
+    "license": "MIT",
+    "require": {
+        "flarum/core": "^0.1.0-beta.16",
+        "flamarkt/core": "^0.1.0"
+    },
+    "authors": [
+        {
+            "name": "Flamarkt",
+            "homepage": "https://flamarkt.org/"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/clarkwinkelmann/flamarkt/categories/issues",
+        "source": "https://github.com/clarkwinkelmann/flamarkt/categories"
+    },
+    "autoload": {
+        "psr-4": {
+            "Flamarkt\\Categories\\": "src/"
+        }
+    },
+    "extra": {
+        "flarum-extension": {
+            "title": "Categories",
+            "category": "flamarkt",
+            "icon": {
+                "name": "fas fa-tags",
+                "backgroundColor": "#684ba6",
+                "color": "#fff"
+            }
+        }
+    }
+}
