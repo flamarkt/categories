@@ -21,8 +21,8 @@
         }
     ],
     "support": {
-        "issues": "https://github.com/clarkwinkelmann/flamarkt/categories/issues",
-        "source": "https://github.com/clarkwinkelmann/flamarkt/categories"
+        "issues": "https://github.com/flamarkt/categories/issues",
+        "source": "https://github.com/flamarkt/categories"
     },
     "autoload": {
         "psr-4": {
@@ -38,6 +38,10 @@
                 "backgroundColor": "#684ba6",
                 "color": "#fff"
             }
+        },
+        "flamarkt-backoffice": {
+            "showInBackoffice": true,
+            "hideFromAdmin": true
         }
     }
 }

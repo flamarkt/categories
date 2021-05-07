@@ -6,13 +6,15 @@ import CategoryList from '../components/CategoryList';
 /* global m */
 
 export default class CategoryIndexPage extends Page {
-    oninit() {
+    oninit(vnode) {
+        super.oninit(vnode);
+
         this.state = new CategoryListState();
         this.state.refresh();
     }
 
     view() {
-        return m('.ProductIndexPage', [
+        return m('.ProductIndexPage', m('.container', [
             m('.Form-group', [
                 LinkButton.component({
                     className: 'Button',
@@ -24,6 +26,6 @@ export default class CategoryIndexPage extends Page {
             m(CategoryList, {
                 state: this.state,
             }),
-        ]);
+        ]));
     }
 }

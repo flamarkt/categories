@@ -1,2 +1,7 @@
 flamarkt-categories:
-    test: Hello
+    backoffice:
+        nav:
+            categories: Categories
+        products:
+            head:
+                category: Category

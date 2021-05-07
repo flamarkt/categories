@@ -1,13 +1,14 @@
 import AbstractShowPage from 'flamarkt/core/common/pages/AbstractShowPage';
+import SubmitButton from 'flamarkt/core/backoffice/components/SubmitButton';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
-import Button from 'flarum/common/components/Button';
 
 export default class CategoryShowPage extends AbstractShowPage {
     oninit(vnode) {
+        super.oninit(vnode);
+
         this.category = null;
         this.saving = false;
-
-        super.oninit(vnode);
+        this.dirty = false;
     }
 
     newRecord() {
@@ -42,6 +43,7 @@ export default class CategoryShowPage extends AbstractShowPage {
                     value: this.title,
                     oninput: event => {
                         this.title = event.target.value;
+                        this.dirty = true;
                     },
                 }),
             ]),
@@ -51,15 +53,16 @@ export default class CategoryShowPage extends AbstractShowPage {
                     value: this.description,
                     oninput: event => {
                         this.description = event.target.value;
+                        this.dirty = true;
                     },
                 }),
             ]),
             m('.Form-group', [
-                Button.component({
-                    type: 'submit',
-                    className: 'Button Button--primary',
+                SubmitButton.component({
                     loading: this.saving,
-                }, 'Save'),
+                    dirty: this.dirty,
+                    exists: this.category.exists,
+                }),
             ]),
         ]));
     }
@@ -80,7 +83,10 @@ export default class CategoryShowPage extends AbstractShowPage {
             this.category = category;
 
             this.saving = false;
+            this.dirty = false;
             m.redraw();
+
+            m.route.set(app.route.category(category));
         }).catch(error => {
             this.saving = false;
             m.redraw();
