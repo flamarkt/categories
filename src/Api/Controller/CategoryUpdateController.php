@@ -5,6 +5,7 @@ namespace Flamarkt\Categories\Api\Controller;
 use Flamarkt\Categories\Api\Serializer\CategorySerializer;
 use Flamarkt\Categories\CategoryRepository;
 use Flarum\Api\Controller\AbstractShowController;
+use Flarum\Http\RequestUtil;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
@@ -22,7 +23,7 @@ class CategoryUpdateController extends AbstractShowController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $actor = $request->getAttribute('actor');
+        $actor = RequestUtil::getActor($request);
 
         $product = $this->repository->findOrFail(Arr::get($request->getQueryParams(), 'id'), $actor);
 

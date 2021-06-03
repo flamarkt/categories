@@ -5,6 +5,7 @@ namespace Flamarkt\Categories\Api\Controller;
 use Flamarkt\Categories\Api\Serializer\CategorySerializer;
 use Flamarkt\Categories\CategoryRepository;
 use Flarum\Api\Controller\AbstractCreateController;
+use Flarum\Http\RequestUtil;
 use Psr\Http\Message\ServerRequestInterface;
 use Tobscure\JsonApi\Document;
 
@@ -21,6 +22,6 @@ class CategoryStoreController extends AbstractCreateController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        return $this->repository->store($request->getAttribute('actor'), $request->getParsedBody());
+        return $this->repository->store(RequestUtil::getActor($request), $request->getParsedBody());
     }
 }

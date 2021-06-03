@@ -11,7 +11,7 @@
     "type": "flarum-extension",
     "license": "MIT",
     "require": {
-        "flarum/core": "^0.1.0-beta.16",
+        "flarum/core": "^1.0",
         "flamarkt/core": "^0.1.0"
     },
     "authors": [
@@ -34,8 +34,8 @@
             "title": "Categories",
             "category": "flamarkt",
             "icon": {
-                "name": "fas fa-tags",
-                "backgroundColor": "#684ba6",
+                "name": "fas fa-th-list",
+                "backgroundColor": "#266a13",
                 "color": "#fff"
             }
         },

@@ -6,6 +6,7 @@ use Flamarkt\Categories\Api\Serializer\CategorySerializer;
 use Flamarkt\Categories\CategoryFilterer;
 use Flamarkt\Categories\CategorySearcher;
 use Flarum\Api\Controller\AbstractListController;
+use Flarum\Http\RequestUtil;
 use Flarum\Http\UrlGenerator;
 use Flarum\Query\QueryCriteria;
 use Psr\Http\Message\ServerRequestInterface;
@@ -28,7 +29,7 @@ class CategoryIndexController extends AbstractListController
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        $actor = $request->getAttribute('actor');
+        $actor = RequestUtil::getActor($request);
         $filters = $this->extractFilter($request);
         $sort = $this->extractSort($request);
 
@@ -51,6 +52,8 @@ class CategoryIndexController extends AbstractListController
             $results->areMoreResults() ? null : 0
         );
 
-        return $results->getResults()->load($include);
+        $this->loadRelations($results->getResults(), $include);
+
+        return $results->getResults();
     }
 }

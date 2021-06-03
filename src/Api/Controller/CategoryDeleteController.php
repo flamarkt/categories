@@ -4,9 +4,9 @@ namespace Flamarkt\Categories\Api\Controller;
 
 use Flamarkt\Categories\CategoryRepository;
 use Flarum\Api\Controller\AbstractDeleteController;
+use Flarum\Http\RequestUtil;
 use Illuminate\Support\Arr;
 use Psr\Http\Message\ServerRequestInterface;
-use Tobscure\JsonApi\Document;
 
 class CategoryDeleteController extends AbstractDeleteController
 {
@@ -21,6 +21,6 @@ class CategoryDeleteController extends AbstractDeleteController
     {
         $category = $this->repository->findOrFail(Arr::get($request->getQueryParams(), 'id'));
 
-        $this->repository->delete($category);
+        $this->repository->delete($category, RequestUtil::getActor($request));
     }
 }
