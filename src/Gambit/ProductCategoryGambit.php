@@ -1,8 +1,6 @@
 <?php
 
-
 namespace Flamarkt\Categories\Gambit;
-
 
 use Flarum\Filter\FilterInterface;
 use Flarum\Filter\FilterState;
@@ -12,7 +10,7 @@ use Illuminate\Database\Query\Builder;
 
 class ProductCategoryGambit extends AbstractRegexGambit implements FilterInterface
 {
-    protected function getGambitPattern()
+    protected function getGambitPattern(): string
     {
         return 'category:(.+)';
     }
@@ -32,8 +30,28 @@ class ProductCategoryGambit extends AbstractRegexGambit implements FilterInterfa
         $this->constrain($filterState->getQuery(), $filterValue, $negate);
     }
 
-    protected function constrain(Builder $query, $value, $negate)
+    protected function constrain(Builder $query, $rawSlugs, $negate)
     {
-        //TODO
+        $slugs = explode(',', trim($rawSlugs, '"'));
+
+        $query->where(function (Builder $query) use ($slugs, $negate) {
+            foreach ($slugs as $slug) {
+                if ($slug === 'uncategorized') {
+                    $query->whereIn('flamarkt_products.id', function (Builder $query) {
+                        $query->select('product_id')
+                            ->from('flamarkt_category_product');
+                    }, 'or', !$negate);
+                } else {
+                    // TODO: allow use of slugs instead of IDs and resolve it here
+                    $id = $slug;
+
+                    $query->whereIn('flamarkt_products.id', function (Builder $query) use ($id) {
+                        $query->select('product_id')
+                            ->from('flamarkt_category_product')
+                            ->where('category_id', $id);
+                    }, 'or', $negate);
+                }
+            }
+        });
     }
 }
