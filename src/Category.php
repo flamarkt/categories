@@ -3,6 +3,8 @@
 namespace Flamarkt\Categories;
 
 use Carbon\Carbon;
+use Flamarkt\Categories\Event\Hidden;
+use Flamarkt\Categories\Event\Restored;
 use Flamarkt\Core\Product\Product;
 use Flarum\Database\AbstractModel;
 use Flarum\Database\ScopeVisibilityTrait;
@@ -13,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations;
 /**
  * @property int $id
  * @property int $parent_id
+ * @property string $slug
  * @property string $title
  * @property string $description
  * @property int $product_count
@@ -47,5 +50,27 @@ class Category extends AbstractModel
     public function products(): Relations\BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'flamarkt_category_product');
+    }
+
+    public function hide(): self
+    {
+        if (!$this->hidden_at) {
+            $this->hidden_at = Carbon::now();
+
+            $this->raise(new Hidden($this));
+        }
+
+        return $this;
+    }
+
+    public function restore(): self
+    {
+        if ($this->hidden_at !== null) {
+            $this->hidden_at = null;
+
+            $this->raise(new Restored($this));
+        }
+
+        return $this;
     }
 }

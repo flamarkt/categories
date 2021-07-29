@@ -14,6 +14,10 @@ class CategoryShowController extends AbstractShowController
 {
     public $serializer = CategorySerializer::class;
 
+    public $include = [
+        'parent',
+    ];
+
     protected $repository;
 
     public function __construct(CategoryRepository $repository)

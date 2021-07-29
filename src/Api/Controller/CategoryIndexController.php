@@ -16,6 +16,10 @@ class CategoryIndexController extends AbstractListController
 {
     public $serializer = CategorySerializer::class;
 
+    public $include = [
+        'parent',
+    ];
+
     protected $filterer;
     protected $searcher;
     protected $url;

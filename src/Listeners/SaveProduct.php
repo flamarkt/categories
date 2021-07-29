@@ -2,29 +2,36 @@
 
 namespace Flamarkt\Categories\Listeners;
 
-use Flamarkt\Categories\Category;
+use Flamarkt\Categories\Event\ProductCategoriesUpdated;
 use Flamarkt\Core\Product\Event\Saving;
+use Illuminate\Support\Arr;
 
 class SaveProduct
 {
     public function handle(Saving $event)
     {
-        if (isset($event->data['relationships']['categories']['data'])) {
+        $relationships = Arr::get($event->data, 'data.relationships');
+
+        if (Arr::exists($relationships, 'categories')) {
             $event->actor->assertCan('backoffice');
 
-            $linkage = (array)$event->data['relationships']['categories']['data'];
+            $linkage = (array)Arr::get($relationships, 'categories.data');
 
             $newCategoryIds = [];
 
             foreach ($linkage as $link) {
-                $newCategoryIds[] = (int)$link['id'];
+                $newCategoryIds[] = (int)Arr::get($link, 'id');
             }
 
-            $newTags = Category::whereIn('id', $newCategoryIds)->get();
+            $oldCategories = $event->product->categories()->get();
 
-            //TODO
+            $event->product->raise(
+                new ProductCategoriesUpdated($event->product, $event->actor, $oldCategories->all())
+            );
+
             $event->product->afterSave(function ($product) use ($newCategoryIds) {
                 $product->categories()->sync($newCategoryIds);
+                $product->unsetRelation('categories');
             });
         }
     }

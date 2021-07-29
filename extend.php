@@ -2,6 +2,7 @@
 
 namespace Flamarkt\Categories;
 
+use Flamarkt\Core\Api as CoreApi;
 use Flamarkt\Core\Product\Event\Saving;
 use Flamarkt\Core\Product\Product;
 use Flamarkt\Core\Product\ProductFilterer;
@@ -32,6 +33,18 @@ return [
     (new Extend\Model(Product::class))
         ->belongsToMany('categories', Category::class, 'flamarkt_category_product'),
 
+    (new Extend\ApiSerializer(CoreApi\Serializer\ProductSerializer::class))
+        ->hasMany('categories', Api\Serializer\BasicCategorySerializer::class),
+
+    (new Extend\ApiController(CoreApi\Controller\ProductIndexController::class))
+        ->addInclude('categories'),
+    (new Extend\ApiController(CoreApi\Controller\ProductStoreController::class))
+        ->addInclude('categories'),
+    (new Extend\ApiController(CoreApi\Controller\ProductShowController::class))
+        ->addInclude('categories'),
+    (new Extend\ApiController(CoreApi\Controller\ProductUpdateController::class))
+        ->addInclude('categories'),
+
     (new Extend\Event())
         ->listen(Saving::class, Listeners\SaveProduct::class),
 
@@ -44,7 +57,4 @@ return [
         ->addFilter(Gambit\NoOpFilter::class),
     (new Extend\SimpleFlarumSearch(CategorySearcher::class))
         ->setFullTextGambit(Gambit\FullTextGambit::class),
-
-    (new Extend\ServiceProvider())
-        ->register(SearchServiceProvider::class),
 ];

@@ -44,13 +44,66 @@ class CategoryRepository
 
     public function save(Category $category, User $actor, array $data): Category
     {
-        $attributes = Arr::get($data, 'data.attributes');
+        $attributes = Arr::get($data, 'data.attributes') ?? [];
+
+        $relationships = Arr::get($data, 'data.relationships') ?? [];
+
+        if (Arr::exists($relationships, 'parent')) {
+            $attributes['parentId'] = Arr::get($relationships, 'parent.data.id');
+        }
+
+        // Set parent ID for slug uniqueness validation
+        if (Arr::exists($attributes, 'parentId')) {
+            $this->validator->setParentId($attributes['parentId']);
+        } else {
+            $this->validator->setParentId($category->parent_id);
+        }
+
+        $this->validator->setCategory($category);
+
+        // Force validation on new records
+        if (!$category->exists) {
+            $attributes = array_merge([
+                'slug' => '',
+                'title' => '',
+            ], $attributes);
+        }
 
         $this->validator->assertValid($attributes);
 
-        //TODO: permission for just admin stuff
-        $category->title = Arr::get($attributes, 'title');
-        $category->description = Arr::get($attributes, 'description');
+        if (Arr::exists($attributes, 'parentId')) {
+            $actor->assertCan('edit', $category);
+
+            $category->parent()->associate($attributes['parentId']);
+        }
+
+        if (Arr::exists($attributes, 'slug')) {
+            $actor->assertCan('edit', $category);
+
+            $category->slug = Arr::get($attributes, 'slug');
+        }
+
+        if (Arr::exists($attributes, 'title')) {
+            $actor->assertCan('edit', $category);
+
+            $category->title = Arr::get($attributes, 'title');
+        }
+
+        if (Arr::exists($attributes, 'description')) {
+            $actor->assertCan('edit', $category);
+
+            $category->description = Arr::get($attributes, 'description') ?: '';
+        }
+
+        if (Arr::exists($attributes, 'isHidden')) {
+            $actor->assertCan('hide', $category);
+
+            if ($attributes['isHidden']) {
+                $category->hide();
+            } else {
+                $category->restore();
+            }
+        }
 
         $this->events->dispatch(new Saving($category, $actor, $data));
 
@@ -70,8 +123,6 @@ class CategoryRepository
 
     public function update(Category $category, User $actor, array $data): Category
     {
-        $actor->assertCan('edit', $category);
-
         return $this->save($category, $actor, $data);
     }
 

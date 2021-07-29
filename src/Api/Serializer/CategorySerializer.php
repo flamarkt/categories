@@ -2,6 +2,8 @@
 
 namespace Flamarkt\Categories\Api\Serializer;
 
+use Tobscure\JsonApi\Relationship;
+
 class CategorySerializer extends BasicCategorySerializer
 {
     protected function getDefaultAttributes($category): array
@@ -21,6 +23,19 @@ class CategorySerializer extends BasicCategorySerializer
             ];
         }
 
+        if ($category->hidden_at) {
+            $attributes['isHidden'] = true;
+
+            if ($this->actor->can('backoffice')) {
+                $attributes['hiddenAt'] = $this->formatDate($category->hidden_at);
+            }
+        }
+
         return $attributes;
+    }
+
+    public function parent($category): ?Relationship
+    {
+        return $this->hasOne($category, BasicCategorySerializer::class);
     }
 }

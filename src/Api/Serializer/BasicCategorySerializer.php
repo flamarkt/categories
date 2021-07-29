@@ -16,6 +16,7 @@ class BasicCategorySerializer extends AbstractSerializer
     protected function getDefaultAttributes($category): array
     {
         return [
+            'slug' => $category->slug,
             'title' => $category->title,
         ];
     }

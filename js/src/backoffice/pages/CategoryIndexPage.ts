@@ -1,12 +1,13 @@
+import {Vnode} from 'mithril';
 import Page from 'flarum/common/components/Page';
 import LinkButton from 'flarum/common/components/LinkButton';
 import CategoryListState from '../states/CategoryListState';
 import CategoryList from '../components/CategoryList';
 
-/* global m */
-
 export default class CategoryIndexPage extends Page {
-    oninit(vnode) {
+    state!: CategoryListState;
+
+    oninit(vnode: Vnode) {
         super.oninit(vnode);
 
         this.state = new CategoryListState();

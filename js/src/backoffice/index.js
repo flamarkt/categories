@@ -1,13 +1,16 @@
-import Category from '../common/models/Category';
-import BackofficeNav from 'flamarkt/core/backoffice/components/BackofficeNav';
-import ProductList from 'flamarkt/core/backoffice/components/ProductList';
-import ActiveLinkButton from 'flamarkt/core/common/components/ActiveLinkButton';
 import {extend} from 'flarum/common/extend';
+import BackofficeNav from 'flamarkt/core/backoffice/components/BackofficeNav';
+import ActiveLinkButton from 'flamarkt/core/common/components/ActiveLinkButton';
+import Model from 'flarum/common/Model';
+import Category from '../common/models/Category';
 import CategoryIndexPage from './pages/CategoryIndexPage';
 import CategoryShowPage from './pages/CategoryShowPage';
+import extendProductIndex from './extendProductIndex';
+import extendProductShow from './extendProductShow';
 
 app.initializers.add('flamarkt-categories', () => {
     app.store.models['flamarkt-categories'] = Category;
+    app.store.models['flamarkt-products'].prototype.categories = Model.hasMany('categories');
 
     app.routes['categories.index'] = {
         path: '/categories',
@@ -34,11 +37,6 @@ app.initializers.add('flamarkt-categories', () => {
         }, app.translator.trans('flamarkt-categories.backoffice.nav.categories')));
     });
 
-    extend(ProductList.prototype, 'head', function (columns) {
-        columns.add('categories', m('th', app.translator.trans('flamarkt-categories.backoffice.products.head.category')), 20);
-    });
-
-    extend(ProductList.prototype, 'columns', function (columns) {
-        columns.add('categories', m('td', 'test'), 20);
-    });
+    extendProductIndex();
+    extendProductShow();
 });
