@@ -10,9 +10,21 @@ class CategoryValidator extends AbstractValidator
     protected $category;
     protected $parentId;
 
+    // Not used internally, but necessary for extensions using the Validator extender
+    public function getCategory(): Category
+    {
+        return $this->category;
+    }
+
     public function setCategory(Category $category)
     {
         $this->category = $category;
+    }
+
+    // Not used internally, but necessary for extensions using the Validator extender
+    public function getParentId()
+    {
+        return $this->parentId;
     }
 
     public function setParentId($parentId)
