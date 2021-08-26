@@ -7,16 +7,30 @@ export interface CategoryShowLayoutAttrs extends ProductIndexLayoutAttrs {
 }
 
 export default class CategoryShowLayout extends ProductIndexLayout<CategoryShowLayoutAttrs> {
+    attrs!: CategoryShowLayoutAttrs
+
     breadcrumbItems() {
         const items = super.breadcrumbItems();
 
-        if (this.attrs.category) {
-            //TODO: parent
-            items.add('category', LinkButton.component({
-                href: app.route.category(this.attrs.category),
-            }, this.attrs.category.title()));
-        }
+        items.add('categories', LinkButton.component({
+            href: app.route('flamarkt.categories.index'),
+        }, app.translator.trans('flamarkt-categories.forum.breadcrumb.categories')));
+
+        //TODO: parent category
 
         return items;
+    }
+
+    title() {
+        if (!this.attrs.category) {
+            return app.translator.trans('flamarkt-categories.forum.category.titleWhileLoading');
+        }
+
+        return this.attrs.category.title();
+    }
+
+    currentPageHref() {
+        // We need to override this method because ProductIndexLayout uses it to signal whether it's the homepage
+        return null;
     }
 }

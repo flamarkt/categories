@@ -1,7 +1,20 @@
 flamarkt-categories:
     backoffice:
         nav:
-            categories: Categories
+            categories: => flamarkt-categories.ref.categories
         products:
             head:
                 category: Category
+    forum:
+        nav:
+            allCategories: All categories
+        breadcrumb:
+            categories: => flamarkt-categories.ref.categories
+        category:
+            titleWhileLoading: Category
+        categories:
+            browserTitle: => flamarkt-categories.ref.categories
+            headingTitle: => flamarkt-categories.ref.categories
+
+    ref:
+        categories: Categories

@@ -73,4 +73,11 @@ class Category extends AbstractModel
 
         return $this;
     }
+
+    public function updateMeta(): self
+    {
+        $this->product_count = $this->products()->count();
+
+        return $this;
+    }
 }

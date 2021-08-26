@@ -26,6 +26,14 @@ export default class CategoryShowPage extends AbstractShowPage {
         return 'flamarkt/categories';
     }
 
+    requestParams(): any {
+        const params = super.requestParams();
+
+        params.bySlug = true;
+
+        return params;
+    }
+
     show(category: Category) {
         this.category = category;
 
@@ -33,7 +41,7 @@ export default class CategoryShowPage extends AbstractShowPage {
         app.setTitleCount(0);
 
         this.state.params.filter = {
-            category: category.id(), // TODO: slug?
+            category: category.slug(),
         };
         this.state.refresh();
     }

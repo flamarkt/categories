@@ -7,6 +7,8 @@ use Flamarkt\Core\Product\Event\Saving;
 use Flamarkt\Core\Product\Product;
 use Flamarkt\Core\Product\ProductFilterer;
 use Flamarkt\Core\Product\ProductSearcher;
+use Flarum\Api\Controller\ShowForumController;
+use Flarum\Api\Serializer\ForumSerializer;
 use Flarum\Extend;
 
 return [
@@ -19,22 +21,25 @@ return [
     (new Extend\Frontend('forum'))
         ->js(__DIR__ . '/js/dist/forum.js')
         ->route('/categories', 'flamarkt.categories.index')
-        ->route('/categories/{id:[0-9]+}', 'flamarkt.categories.show'),
+        ->route('/categories/{id}', 'flamarkt.categories.show'),
 
     new Extend\Locales(__DIR__ . '/resources/locale'),
 
     (new Extend\Routes('api'))
         ->get('/flamarkt/categories', 'flamarkt.categories.index', Api\Controller\CategoryIndexController::class)
         ->post('/flamarkt/categories', 'flamarkt.categories.store', Api\Controller\CategoryStoreController::class)
-        ->get('/flamarkt/categories/{id:[0-9]+}', 'flamarkt.categories.show', Api\Controller\CategoryShowController::class)
-        ->patch('/flamarkt/categories/{id:[0-9]+}', 'flamarkt.categories.update', Api\Controller\CategoryUpdateController::class)
-        ->delete('/flamarkt/categories/{id:[0-9]+}', 'flamarkt.categories.delete', Api\Controller\CategoryDeleteController::class),
+        ->get('/flamarkt/categories/{id}', 'flamarkt.categories.show', Api\Controller\CategoryShowController::class)
+        ->patch('/flamarkt/categories/{id}', 'flamarkt.categories.update', Api\Controller\CategoryUpdateController::class)
+        ->delete('/flamarkt/categories/{id}', 'flamarkt.categories.delete', Api\Controller\CategoryDeleteController::class),
 
     (new Extend\Model(Product::class))
         ->belongsToMany('categories', Category::class, 'flamarkt_category_product'),
 
     (new Extend\ApiSerializer(CoreApi\Serializer\ProductSerializer::class))
         ->hasMany('categories', Api\Serializer\BasicCategorySerializer::class),
+
+    (new Extend\ApiSerializer(ForumSerializer::class))
+        ->hasMany('categories', Api\Serializer\CategorySerializer::class),
 
     (new Extend\ApiController(CoreApi\Controller\ProductIndexController::class))
         ->addInclude('categories'),
@@ -45,8 +50,13 @@ return [
     (new Extend\ApiController(CoreApi\Controller\ProductUpdateController::class))
         ->addInclude('categories'),
 
+    (new Extend\ApiController(ShowForumController::class))
+        ->addInclude('categories')
+        ->prepareDataForSerialization(LoadForumCategoryRelationship::class),
+
     (new Extend\Event())
-        ->listen(Saving::class, Listeners\SaveProduct::class),
+        ->listen(Saving::class, Listeners\SaveProduct::class)
+        ->listen(Event\ProductCategoriesUpdated::class, Listeners\UpdateMeta::class),
 
     (new Extend\Filter(ProductFilterer::class))
         ->addFilter(Gambit\ProductCategoryGambit::class),
@@ -57,4 +67,7 @@ return [
         ->addFilter(Gambit\NoOpFilter::class),
     (new Extend\SimpleFlarumSearch(CategorySearcher::class))
         ->setFullTextGambit(Gambit\FullTextGambit::class),
+
+    (new Extend\ModelUrl(Category::class))
+        ->addSlugDriver('default', SlugDriver::class),
 ];
