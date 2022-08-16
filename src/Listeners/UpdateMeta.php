@@ -10,7 +10,7 @@ class UpdateMeta
     public function handle(ProductCategoriesUpdated $event)
     {
         $oldIds = Arr::pluck($event->oldCategories, 'id');
-        $newIds = $event->product->categories->pluck('id');
+        $newIds = $event->product->categories->pluck('id')->all();
 
         $removed = array_diff($oldIds, $newIds);
 
