@@ -1,4 +1,4 @@
-import AbstractRelationshipSelect from 'flamarkt/core/backoffice/components/AbstractRelationshipSelect';
+import AbstractRelationshipSelect from 'flamarkt/backoffice/common/components/AbstractRelationshipSelect';
 import highlight from 'flarum/common/helpers/highlight';
 import Category from '../../common/models/Category';
 

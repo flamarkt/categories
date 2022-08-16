@@ -1,7 +1,7 @@
+import app from 'flarum/forum/app';
 import {extend} from 'flarum/common/extend';
 import LinkButton from 'flarum/common/components/LinkButton';
 import Separator from 'flarum/common/components/Separator';
-import ItemList from 'flarum/common/utils/ItemList';
 import IndexPage from 'flarum/forum/components/IndexPage';
 import Category from '../common/models/Category';
 import CategoryIndexPage from './pages/CategoryIndexPage';
@@ -25,7 +25,7 @@ app.initializers.add('flamarkt-categories', () => {
         });
     };
 
-    extend(IndexPage.prototype, 'navItems', function (items: ItemList) {
+    extend(IndexPage.prototype, 'navItems', function (items) {
         items.add('flamarkt-categories', LinkButton.component({
             icon: 'fas fa-th-large',
             href: app.route('flamarkt.categories.index'),
@@ -35,7 +35,7 @@ app.initializers.add('flamarkt-categories', () => {
 
         items.add('separator', Separator.component(), -12);
 
-        const categories = app.store.all('flamarkt-categories');
+        const categories = app.store.all<Category>('flamarkt-categories');
 
         categories.forEach(category => {
             items.add('flamarkt-category' + category.id(), LinkButton.component({
@@ -44,7 +44,7 @@ app.initializers.add('flamarkt-categories', () => {
             }, [
                 category.title(),
                 m('span.Button-badge', category.productCount()),
-            ] as any), -14);
+            ]), -14);
         });
     });
 });

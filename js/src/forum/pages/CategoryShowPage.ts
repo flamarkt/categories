@@ -1,17 +1,18 @@
 import {Vnode} from 'mithril';
-import AbstractShowPage from 'flamarkt/core/common/pages/AbstractShowPage';
+import app from 'flarum/forum/app';
+import AbstractShowPage from 'flamarkt/backoffice/common/pages/AbstractShowPage';
 import ProductListState from 'flamarkt/core/common/states/ProductListState';
 import CategoryShowLayout from '../layouts/CategoryShowLayout';
 import Category from '../../common/models/Category';
 
 export default class CategoryShowPage extends AbstractShowPage {
     category: Category | null = null;
-    state!: ProductListState;
+    listState!: ProductListState;
 
     oninit(vnode: Vnode) {
         super.oninit(vnode);
 
-        this.state = this.initState();
+        this.listState = this.initState();
     }
 
     initState() {
@@ -40,16 +41,16 @@ export default class CategoryShowPage extends AbstractShowPage {
         app.setTitle(category.title());
         app.setTitleCount(0);
 
-        this.state.params.filter = {
+        this.listState.params.filter = {
             category: category.slug(),
         };
-        this.state.refresh();
+        this.listState.refresh();
     }
 
     view() {
         return CategoryShowLayout.component({
             category: this.category,
-            state: this.state,
+            state: this.listState,
         });
     }
 }

@@ -1,7 +1,8 @@
-import AbstractShowPage from 'flamarkt/core/common/pages/AbstractShowPage';
-import SubmitButton from 'flamarkt/core/backoffice/components/SubmitButton';
-import SoftDeleteButton from 'flamarkt/core/backoffice/components/SoftDeleteButton';
-import PermanentDeleteButton from 'flamarkt/core/backoffice/components/PermanentDeleteButton';
+import {Children} from 'mithril';
+import AbstractShowPage from 'flamarkt/backoffice/common/pages/AbstractShowPage';
+import SubmitButton from 'flamarkt/backoffice/backoffice/components/SubmitButton';
+import SoftDeleteButton from 'flamarkt/backoffice/backoffice/components/SoftDeleteButton';
+import PermanentDeleteButton from 'flamarkt/backoffice/backoffice/components/PermanentDeleteButton';
 import LoadingIndicator from 'flarum/common/components/LoadingIndicator';
 import ItemList from 'flarum/common/utils/ItemList';
 import Category from '../../common/models/Category';
@@ -45,14 +46,14 @@ export default class CategoryShowPage extends AbstractShowPage {
         }, m('.container.container--narrow', this.fields().toArray()));
     }
 
-    fields(): ItemList {
-        const fields = new ItemList();
+    fields(): ItemList<Children> {
+        const fields = new ItemList<Children>();
 
         fields.add('parent', m('.Form-group', [
             m('label', 'Parent'),
             m(CategoryRelationshipSelect, {
                 relationship: this.parent,
-                onchange: category => {
+                onchange: (category: Category) => {
                     this.parent = category;
                     this.dirty = true;
                 },

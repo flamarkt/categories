@@ -1,3 +1,4 @@
+import app from 'flarum/forum/app';
 import ProductIndexLayout, {ProductIndexLayoutAttrs} from 'flamarkt/core/forum/layouts/ProductIndexLayout';
 import LinkButton from 'flarum/common/components/LinkButton';
 import Category from '../../common/models/Category';
@@ -31,6 +32,6 @@ export default class CategoryShowLayout extends ProductIndexLayout<CategoryShowL
 
     currentPageHref() {
         // We need to override this method because ProductIndexLayout uses it to signal whether it's the homepage
-        return null;
+        return '';
     }
 }

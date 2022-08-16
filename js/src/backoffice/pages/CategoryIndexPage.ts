@@ -5,13 +5,13 @@ import CategoryListState from '../states/CategoryListState';
 import CategoryList from '../components/CategoryList';
 
 export default class CategoryIndexPage extends Page {
-    state!: CategoryListState;
+    categoryState!: CategoryListState;
 
     oninit(vnode: Vnode) {
         super.oninit(vnode);
 
-        this.state = new CategoryListState();
-        this.state.refresh();
+        this.categoryState = new CategoryListState();
+        this.categoryState.refresh();
     }
 
     view() {
@@ -25,7 +25,7 @@ export default class CategoryIndexPage extends Page {
                 }, 'New category' /* TODO */),
             ]),
             m(CategoryList, {
-                state: this.state,
+                state: this.categoryState,
             }),
         ]));
     }
