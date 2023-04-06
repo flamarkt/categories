@@ -1,17 +1,18 @@
 import {Vnode} from 'mithril';
+import app from 'flamarkt/backoffice/backoffice/app';
 import Page from 'flarum/common/components/Page';
 import LinkButton from 'flarum/common/components/LinkButton';
 import CategoryListState from '../states/CategoryListState';
 import CategoryList from '../components/CategoryList';
 
 export default class CategoryIndexPage extends Page {
-    categoryState!: CategoryListState;
+    list!: CategoryListState;
 
     oninit(vnode: Vnode) {
         super.oninit(vnode);
 
-        this.categoryState = new CategoryListState();
-        this.categoryState.refresh();
+        this.list = new CategoryListState();
+        this.list.refresh();
     }
 
     view() {
@@ -25,7 +26,7 @@ export default class CategoryIndexPage extends Page {
                 }, 'New category' /* TODO */),
             ]),
             m(CategoryList, {
-                state: this.categoryState,
+                list: this.list,
             }),
         ]));
     }

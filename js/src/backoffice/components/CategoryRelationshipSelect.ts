@@ -1,3 +1,4 @@
+import app from 'flamarkt/backoffice/backoffice/app';
 import AbstractRelationshipSelect from 'flamarkt/backoffice/common/components/AbstractRelationshipSelect';
 import highlight from 'flarum/common/helpers/highlight';
 import Category from '../../common/models/Category';
@@ -14,7 +15,7 @@ export default class CategoryRelationshipSelect extends AbstractRelationshipSele
         query = query.toLowerCase();
 
         return app.store
-            .find('flamarkt/categories', {
+            .find<Category[]>('flamarkt/categories', {
                 filter: {q: query},
                 page: {limit: 5},
             })

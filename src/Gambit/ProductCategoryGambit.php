@@ -13,11 +13,10 @@ use Illuminate\Database\Query\Builder;
 
 class ProductCategoryGambit extends AbstractRegexGambit implements FilterInterface
 {
-    protected $slugManager;
-
-    public function __construct(SlugManager $slugManager)
+    public function __construct(
+        protected SlugManager $slugManager
+    )
     {
-        $this->slugManager = $slugManager;
     }
 
     protected function getGambitPattern(): string

@@ -17,15 +17,14 @@ class CategoryStoreController extends AbstractCreateController
         'parent',
     ];
 
-    protected $repository;
-
-    public function __construct(CategoryRepository $repository)
+    public function __construct(
+        protected CategoryRepository $repository
+    )
     {
-        $this->repository = $repository;
     }
 
     protected function data(ServerRequestInterface $request, Document $document)
     {
-        return $this->repository->store(RequestUtil::getActor($request), $request->getParsedBody());
+        return $this->repository->store(RequestUtil::getActor($request), (array)$request->getParsedBody());
     }
 }

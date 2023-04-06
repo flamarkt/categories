@@ -10,11 +10,10 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class CategoryDeleteController extends AbstractDeleteController
 {
-    protected $repository;
-
-    public function __construct(CategoryRepository $repository)
+    public function __construct(
+        protected CategoryRepository $repository
+    )
     {
-        $this->repository = $repository;
     }
 
     protected function delete(ServerRequestInterface $request)

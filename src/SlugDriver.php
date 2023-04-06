@@ -8,11 +8,10 @@ use Flarum\User\User;
 
 class SlugDriver implements SlugDriverInterface
 {
-    protected $categories;
-
-    public function __construct(CategoryRepository $categories)
+    public function __construct(
+        protected CategoryRepository $categories
+    )
     {
-        $this->categories = $categories;
     }
 
     public function toSlug(AbstractModel $instance): string

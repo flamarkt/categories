@@ -13,7 +13,9 @@ class CategorySerializer extends BasicCategorySerializer
         $attributes += [
             'title' => $category->title,
             'description' => $category->description,
+            'priority' => $category->priority,
             'productCount' => $category->product_count,
+            'isRoot' => is_null($category->parent_id),
         ];
 
         if ($this->actor->can('backoffice')) {

@@ -20,6 +20,7 @@ return [
 
     (new Extend\Frontend('forum'))
         ->js(__DIR__ . '/js/dist/forum.js')
+        ->css(__DIR__ . '/resources/less/forum.less')
         ->route('/categories', 'flamarkt.categories.index')
         ->route('/categories/{id}', 'flamarkt.categories.show'),
 
@@ -51,7 +52,7 @@ return [
         ->addInclude('categories'),
 
     (new Extend\ApiController(ShowForumController::class))
-        ->addInclude('categories')
+        ->addInclude('categories.parent')
         ->prepareDataForSerialization(LoadForumCategoryRelationship::class),
 
     (new Extend\Event())
@@ -64,10 +65,16 @@ return [
         ->addGambit(Gambit\ProductCategoryGambit::class),
 
     (new Extend\Filter(CategoryFilterer::class))
-        ->addFilter(Gambit\NoOpFilter::class),
+        ->addFilter(Gambit\NoOpFilter::class)
+        ->addFilterMutator(Gambit\ApplyDefaultCategorySort::class),
     (new Extend\SimpleFlarumSearch(CategorySearcher::class))
         ->setFullTextGambit(Gambit\FullTextGambit::class),
 
     (new Extend\ModelUrl(Category::class))
         ->addSlugDriver('default', SlugDriver::class),
+
+    (new Extend\Settings())
+        ->serializeToForum('flamarktCategoriesListInSideNav', 'flamarkt-categories.listInSideNav', 'boolval')
+        ->serializeToForum('flamarktCategoriesIndexInSideNav', 'flamarkt-categories.indexInSideNav', 'boolval')
+        ->serializeToForum('flamarktCategoriesIndexInBreadcrumb', 'flamarkt-categories.indexInBreadcrumb', 'boolval'),
 ];

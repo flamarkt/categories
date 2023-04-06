@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 
 class UpdateMeta
 {
-    public function handle(ProductCategoriesUpdated $event)
+    public function handle(ProductCategoriesUpdated $event): void
     {
         $oldIds = Arr::pluck($event->oldCategories, 'id');
         $newIds = $event->product->categories->pluck('id')->all();

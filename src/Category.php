@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations;
  * @property string $slug
  * @property string $title
  * @property string $description
+ * @property int $priority
  * @property int $product_count
  * @property Carbon $created_at
  * @property Carbon $updated_at

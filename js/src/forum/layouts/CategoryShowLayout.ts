@@ -1,7 +1,7 @@
 import app from 'flarum/forum/app';
 import ProductIndexLayout, {ProductIndexLayoutAttrs} from 'flamarkt/core/forum/layouts/ProductIndexLayout';
-import LinkButton from 'flarum/common/components/LinkButton';
 import Category from '../../common/models/Category';
+import buildBreadcrumb from '../utils/buildBreadcrumb';
 
 export interface CategoryShowLayoutAttrs extends ProductIndexLayoutAttrs {
     category: Category | null,
@@ -13,11 +13,7 @@ export default class CategoryShowLayout extends ProductIndexLayout<CategoryShowL
     breadcrumbItems() {
         const items = super.breadcrumbItems();
 
-        items.add('categories', LinkButton.component({
-            href: app.route('flamarkt.categories.index'),
-        }, app.translator.trans('flamarkt-categories.forum.breadcrumb.categories')));
-
-        //TODO: parent category
+        buildBreadcrumb(items, this.attrs.category, true);
 
         return items;
     }

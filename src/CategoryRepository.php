@@ -13,12 +13,12 @@ class CategoryRepository
 {
     use DispatchEventsTrait;
 
-    protected $validator;
-
-    public function __construct(Dispatcher $events, CategoryValidator $validator)
+    public function __construct(
+        Dispatcher                  $events,
+        protected CategoryValidator $validator
+    )
     {
         $this->events = $events;
-        $this->validator = $validator;
     }
 
     public function query(): Builder
@@ -95,6 +95,12 @@ class CategoryRepository
             $category->description = Arr::get($attributes, 'description') ?: '';
         }
 
+        if (Arr::exists($attributes, 'priority')) {
+            $actor->assertCan('edit', $category);
+
+            $category->priority = (int)Arr::get($attributes, 'priority');
+        }
+
         if (Arr::exists($attributes, 'isHidden')) {
             $actor->assertCan('hide', $category);
 
@@ -126,7 +132,7 @@ class CategoryRepository
         return $this->save($category, $actor, $data);
     }
 
-    public function delete(Category $category, User $actor)
+    public function delete(Category $category, User $actor): void
     {
         $actor->assertCan('delete', $category);
 

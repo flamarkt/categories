@@ -1,6 +1,5 @@
 import {extend} from 'flarum/common/extend';
 import ProductShowPage from 'flamarkt/core/backoffice/pages/ProductShowPage';
-import ItemList from 'flarum/common/utils/ItemList';
 import CategoryRelationshipSelect from './components/CategoryRelationshipSelect';
 
 export default function () {
@@ -12,7 +11,7 @@ export default function () {
         this.categories = product.categories() || [];
     });
 
-    extend(ProductShowPage.prototype, 'fields', function (this: ProductShowPage, fields: ItemList) {
+    extend(ProductShowPage.prototype, 'fields', function (this: ProductShowPage, fields) {
         fields.add('categories', m('.Form-group', [
             m('label', 'Categories'),
             m(CategoryRelationshipSelect, {

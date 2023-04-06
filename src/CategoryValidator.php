@@ -7,27 +7,27 @@ use Illuminate\Validation\Rule;
 
 class CategoryValidator extends AbstractValidator
 {
-    protected $category;
-    protected $parentId;
+    protected ?Category $category;
+    protected ?int $parentId;
 
     // Not used internally, but necessary for extensions using the Validator extender
-    public function getCategory(): Category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory(Category $category)
+    public function setCategory(?Category $category)
     {
         $this->category = $category;
     }
 
     // Not used internally, but necessary for extensions using the Validator extender
-    public function getParentId()
+    public function getParentId(): ?int
     {
         return $this->parentId;
     }
 
-    public function setParentId($parentId)
+    public function setParentId(?int $parentId): void
     {
         $this->parentId = $parentId;
     }
@@ -59,6 +59,11 @@ class CategoryValidator extends AbstractValidator
                 'nullable',
                 'string',
                 'max:255',
+            ],
+            'priority' => [
+                'nullable',
+                'integer',
+                'min:0',
             ],
         ];
     }

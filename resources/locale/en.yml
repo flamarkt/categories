@@ -1,5 +1,9 @@
 flamarkt-categories:
     backoffice:
+        settings:
+            listInSideNav: List root categories in side navigation
+            indexInSideNav: Link to categories index page in side navigation
+            indexInBreadcrumb: Link to categories index page in breadcrumb
         nav:
             categories: => flamarkt-categories.ref.categories
         products:

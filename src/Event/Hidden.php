@@ -7,12 +7,10 @@ use Flarum\User\User;
 
 class Hidden
 {
-    public $category;
-    public $actor;
-
-    public function __construct(Category $category, User $actor = null)
+    public function __construct(
+        public Category $category,
+        public ?User    $actor = null
+    )
     {
-        $this->category = $category;
-        $this->actor = $actor;
     }
 }

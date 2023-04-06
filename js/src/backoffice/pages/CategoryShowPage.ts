@@ -1,4 +1,5 @@
 import {Children} from 'mithril';
+import app from 'flamarkt/backoffice/backoffice/app';
 import AbstractShowPage from 'flamarkt/backoffice/common/pages/AbstractShowPage';
 import SubmitButton from 'flamarkt/backoffice/backoffice/components/SubmitButton';
 import SoftDeleteButton from 'flamarkt/backoffice/backoffice/components/SoftDeleteButton';
@@ -16,6 +17,7 @@ export default class CategoryShowPage extends AbstractShowPage {
     slug: string = '';
     title: string = '';
     description: string = '';
+    priority: string = '';
 
     newRecord() {
         return app.store.createRecord('flamarkt-categories');
@@ -31,6 +33,7 @@ export default class CategoryShowPage extends AbstractShowPage {
         this.slug = category.slug() || '';
         this.title = category.title() || '';
         this.description = category.description() || '';
+        this.priority = category.priority() + '';
 
         app.setTitle(category.title());
         app.setTitleCount(0);
@@ -59,7 +62,7 @@ export default class CategoryShowPage extends AbstractShowPage {
                 },
                 hasOne: true,
             }),
-        ]), 20);
+        ]), 100);
 
         fields.add('slug', m('.Form-group', [
             m('label', 'Slug'),
@@ -71,7 +74,7 @@ export default class CategoryShowPage extends AbstractShowPage {
                     this.dirty = true;
                 },
             }),
-        ]), 20);
+        ]), 80);
 
         fields.add('title', m('.Form-group', [
             m('label', 'Title'),
@@ -83,7 +86,7 @@ export default class CategoryShowPage extends AbstractShowPage {
                     this.dirty = true;
                 },
             }),
-        ]), 20);
+        ]), 60);
 
         fields.add('description', m('.Form-group', [
             m('label', 'Description'),
@@ -94,7 +97,20 @@ export default class CategoryShowPage extends AbstractShowPage {
                     this.dirty = true;
                 },
             }),
-        ]), 10);
+        ]), 40);
+
+        fields.add('priority', m('.Form-group', [
+            m('label', 'Priority'),
+            m('input.FormControl', {
+                type: 'number',
+                min: 0,
+                value: this.priority,
+                oninput: (event: Event) => {
+                    this.priority = (event.target as HTMLInputElement).value;
+                    this.dirty = true;
+                },
+            }),
+        ]), 20);
 
         fields.add('submit', m('.Form-group', [
             SubmitButton.component({
@@ -113,7 +129,7 @@ export default class CategoryShowPage extends AbstractShowPage {
                     m.route.set(app.route('categories.index'));
                 },
             }),
-        ]));
+        ]), -10);
 
         return fields;
     }
@@ -123,6 +139,7 @@ export default class CategoryShowPage extends AbstractShowPage {
             slug: this.slug,
             title: this.title,
             description: this.description,
+            priority: parseInt(this.priority),
             relationships: {
                 parent: this.parent,
             },

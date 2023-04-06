@@ -21,13 +21,11 @@ class CategoryShowController extends AbstractShowController
         'parent',
     ];
 
-    protected $slugManager;
-    protected $repository;
-
-    public function __construct(SlugManager $slugManager, CategoryRepository $repository)
+    public function __construct(
+        protected SlugManager        $slugManager,
+        protected CategoryRepository $repository
+    )
     {
-        $this->slugManager = $slugManager;
-        $this->repository = $repository;
     }
 
     protected function data(ServerRequestInterface $request, Document $document)

@@ -18,11 +18,10 @@ class CategoryUpdateController extends AbstractShowController
         'parent',
     ];
 
-    protected $repository;
-
-    public function __construct(CategoryRepository $repository)
+    public function __construct(
+        protected CategoryRepository $repository
+    )
     {
-        $this->repository = $repository;
     }
 
     protected function data(ServerRequestInterface $request, Document $document)
@@ -31,6 +30,6 @@ class CategoryUpdateController extends AbstractShowController
 
         $product = $this->repository->findOrFail(Arr::get($request->getQueryParams(), 'id'), $actor);
 
-        return $this->repository->update($product, $actor, $request->getParsedBody());
+        return $this->repository->update($product, $actor, (array)$request->getParsedBody());
     }
 }

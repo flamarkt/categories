@@ -8,7 +8,7 @@ use Illuminate\Support\Arr;
 
 class SaveProduct
 {
-    public function handle(Saving $event)
+    public function handle(Saving $event): void
     {
         $relationships = (array)Arr::get($event->data, 'data.relationships');
 
