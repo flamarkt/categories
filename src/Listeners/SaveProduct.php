@@ -10,7 +10,7 @@ class SaveProduct
 {
     public function handle(Saving $event): void
     {
-        $relationships = (array)Arr::get($event->data, 'data.relationships');
+        $relationships = (array)Arr::get($event->data, 'relationships');
 
         if (Arr::exists($relationships, 'categories')) {
             $event->actor->assertCan('backoffice');
